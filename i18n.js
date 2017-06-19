@@ -750,6 +750,8 @@ module.exports = (function() {
       if (languageHeader) {
         var acceptedLanguages = getAcceptedLanguagesFromHeader(languageHeader),
           match, fallbackMatch, fallback;
+
+        var wildCardChecked = {};
         for (var i = 0; i < acceptedLanguages.length; i++) {
           var lang = acceptedLanguages[i],
             lr = lang.split('-', 2),
@@ -757,16 +759,32 @@ module.exports = (function() {
             region = lr[1];
 
           // Check if we have a configured fallback set for this language.
-          if (fallbacks && fallbacks[lang]) {
-            fallback = fallbacks[lang];
-            // Fallbacks for languages should be inserted
-            // where the original, unsupported language existed.
-            var acceptedLanguageIndex = acceptedLanguages.indexOf(lang);
-            var fallbackIndex = acceptedLanguages.indexOf(fallback);
-            if(fallbackIndex > -1) {
-              acceptedLanguages.splice(fallbackIndex, 1);
+          if (fallbacks) {
+            var acceptedLanguageIndex,
+              fallbackIndex;
+
+            if (fallbacks[lang]) {
+              fallback = fallbacks[lang];
+              // Fallbacks for languages should be inserted
+              // where the original, unsupported language existed.
+              acceptedLanguageIndex = acceptedLanguages.indexOf(lang);
+              fallbackIndex = acceptedLanguages.indexOf(fallback);
+              if(fallbackIndex > -1) {
+                acceptedLanguages.splice(fallbackIndex, 1);
+              }
+              acceptedLanguages.splice(acceptedLanguageIndex + 1, 0, fallback);
             }
-            acceptedLanguages.splice(acceptedLanguageIndex + 1, 0, fallback);
+            // Check if we have a configured fallback by using wildcards
+            if (!wildCardChecked[parentLang] && fallbacks[parentLang + '-*']) {
+              fallback = fallbacks[parentLang + '-*'];
+              acceptedLanguageIndex = acceptedLanguages.indexOf(lang);
+              fallbackIndex = acceptedLanguages.indexOf(fallback);
+              if(fallbackIndex > -1) {
+                acceptedLanguages.splice(fallbackIndex, 1);
+              }
+              acceptedLanguages.splice(acceptedLanguageIndex + 1, 0, fallback);
+              wildCardChecked[parentLang] = true;
+            }
           }
 
           // Check if we have a configured fallback set for the parent language of the locale.
