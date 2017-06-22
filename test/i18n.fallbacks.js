@@ -15,9 +15,9 @@ describe('Fallbacks', function() {
     beforeEach(function() {
 
       i18n.configure({
-        locales: ['en', 'de'],
+        locales: ['en', 'de', 'fr'],
         defaultLocale: 'en',
-        fallbacks: { 'foo': 'de', 'de-AT': 'de' },
+        fallbacks: { 'foo': 'de', 'de-AT': 'de', 'fr-*': 'fr' },
         directory: './locales',
         register: req
       });
@@ -44,6 +44,11 @@ describe('Fallbacks', function() {
       req.headers['accept-language'] = 'de-AT';
       i18n.init(req);
       i18n.getLocale(req).should.equal('de');
+    });
+    it('should fall back to "fr" for locale "fr-BAR" by using wildcards', function() {
+      req.headers['accept-language'] = 'fr-BAR';
+      i18n.init(req);
+      i18n.getLocale(req).should.equal('fr');
     });
     it('should fall back to "de" for second-order locale "de-AT"', function() {
       req.headers['accept-language'] = 'de-DK,de-AT';

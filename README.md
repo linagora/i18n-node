@@ -108,6 +108,46 @@ app.use('/en', express.static(__dirname + '/www'));
 app.use('/de', express.static(__dirname + '/www'));
 ```
 
+## Multiple Directories support
+
+i18n-node support a multiple directory usage. This option let you register different directories to provide translations. Just add "multiDirectories : true" in your configuration then use the configure method to provide new directory and a name for it. Finally call translations methods with directory name as last argument.
+Please note that in case you do not use the updateFiles you may ommit directory name and juste call translations method as usual.
+
+### Exemple
+
+Configure i18n as usual. Add "multiDirectories" as true, specify new directory path and a name (if need).
+
+	i18n.configure({
+      locales:['en', 'de'],
+      multiDirectories: true,
+      directory: __dirname + '/locales',
+      dirName: 'newDirectory'
+	});
+
+Then translate anything as usual if translation come from default directory, or just pass the directory name if translation come from another directory
+
+```
+__('sentence to translate');
+//Same as __('sentence to translate', 'default');
+
+__('sentence to translate', 'newDirectory');
+```
+
+### Details
+
+When you set multiDirectories at true in the configure method, a "directories" object is initialized. Then every time you register a new source directory with configure method you extend this object with a new directory path and a name for this path. Finally you can call translations methods and provide as last argument the name of the directory path you set earlier.
+
+Note that when you activate the multiDirectories option you cannot reset every option for every directory. It means you must have the same directory configuration (eg : indentation, object notation, prefixes ...).
+
+The available option are :
+
+ - directory : path to sources
+ - dirName : directory name / module name
+ - locales
+ - fallbacks
+
+__If you want to reset your i18n configuration__, call configure() with multiDirectories at false and every option will be reseted
+
 ## API
 
 The api is subject of incremental development. That means, it should not change nor remove any aspect of the current api but new features and options will get added that don't break compatibility backwards within a major version.
@@ -138,7 +178,8 @@ i18n.configure({
     locales:['en', 'de'],
 
     // fall back from Dutch to German
-    fallbacks:{'nl': 'de'},
+    // use wildcards to cover every local variation for a given language
+    fallbacks:{'nl': 'de', 'en-*': 'en'},
 
     // you may alter a site wide default locale
     defaultLocale: 'de',
@@ -151,6 +192,10 @@ i18n.configure({
 
     // where to store json files - defaults to './locales' relative to modules directory
     directory: './mylocales',
+
+    // support multi directory
+    multiDirectories: true,
+    dirName: 'newDirectory',
 
     // controll mode on directory creation - defaults to NULL which defaults to umask of process user. Setting has no effect on win.
     directoryPermissions: '755',
