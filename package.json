@@ -1,7 +1,7 @@
 {
   "name": "i18n",
   "description": "lightweight translation module with dynamic json storage",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "homepage": "http://github.com/mashpie/i18n-node",
   "repository": {
     "type": "git",
@@ -18,24 +18,24 @@
     "lib": "."
   },
   "dependencies": {
-    "debug": "2.6.8",
-    "extend": "3.0.1",
-    "make-plural": "4.0.1",
-    "math-interval-parser": "2.0.0",
-    "messageformat": "0.3.1",
-    "mustache": "2.3.0",
-    "sprintf-js": "1.1.1"
+    "debug": "^3.0.1",
+    "extend": "^3.0.1",
+    "make-plural": "^4.0.1",
+    "math-interval-parser": "^2.0.0",
+    "messageformat": "^1.0.2",
+    "mustache": "^2.3.0",
+    "sprintf-js": "^1.1.1"
   },
   "devDependencies": {
-    "async": "2.4.1",
-    "cookie-parser": "1.4.3",
-    "express": "4.13.4",
-    "jshint": "2.9.5",
-    "mocha": "3.4.2",
-    "should": "11.2.1",
-    "sinon": "2.3.5",
-    "url": "0.11.0",
-    "zombie": "5.0.5"
+    "async": "^2.5.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.5",
+    "jshint": "^2.9.5",
+    "mocha": "^3.5.3",
+    "should": "^13.1.0",
+    "sinon": "^3.3.0",
+    "url": "^0.11.0",
+    "zombie": "^5.0.7"
   },
   "engines": {
     "node": ">=0.10.0"
